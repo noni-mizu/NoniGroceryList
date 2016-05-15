@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#c51162</color>
+    <color name="colorPrimaryDark">#bdbdbd</color>
+    <color name="colorAccent">#f8bbd0</color>
+
+    <!-- Toast color -->
+    <color name="toast_color">#bdbdbd</color>
+
+</resources>
