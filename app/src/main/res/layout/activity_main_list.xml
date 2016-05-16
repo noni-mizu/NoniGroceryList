@@ -24,6 +24,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/itemName"
+            android:transitionName="item_name"
             android:text="Item"
             android:textSize="30sp"
             android:textColor="@color/colorPrimaryDark"
@@ -67,7 +68,8 @@
         android:layout_alignParentStart="true"
         android:layout_toLeftOf="@+id/btnAddItem"
         android:layout_toStartOf="@+id/btnAddItem"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignBaseline="@+id/btnAddItem"/>
 
     <Button
         android:layout_width="wrap_content"

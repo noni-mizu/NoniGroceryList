@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -22,6 +25,7 @@ public class ListItemDetailsActivity extends AppCompatActivity {
     String qty;
     ListItemsModel model;
     private boolean allowChangeButtonPress = false;
+    private boolean allowSaveButtonPress = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,32 +52,60 @@ public class ListItemDetailsActivity extends AppCompatActivity {
         model = new ListItemsModel(itemName, qty);
 
         // set onClick listener to itemQty, so select all when clicked
-        itemQty.setOnClickListener(new View.OnClickListener() {
+        itemQty.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                itemQty.selectAll();
-            }
-
-        });
-
-        // set click listener to detect if itemQty is used, if not, don't allow Change button
-        itemQty.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                allowChangeButtonPress = true;
+            public boolean onTouch(View v, MotionEvent event) {
+                if(MotionEvent.ACTION_UP == event.getAction()) {
+                    itemQty.selectAll();
+                }
+                return false; // return false if still want keyboard up
             }
         });
+
+        // TextWatcher to detect if itemQty changed, if not, don't allow Change button press
+        itemQty.addTextChangedListener(changeTextWatcherQty);
+
+        // TextWatcher to detect if itemDetails changed, if not, don't allow Save button press
+        itemDetails.addTextChangedListener(changeTextWatcherDetails);
     }
 
+    private final TextWatcher changeTextWatcherQty = new TextWatcher() {
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+        public void afterTextChanged(Editable s) {
+            allowChangeButtonPress = true;
+        }
+    };
+
+    private final TextWatcher changeTextWatcherDetails = new TextWatcher() {
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+        public void afterTextChanged(Editable s) {
+            allowSaveButtonPress = true;
+        }
+    };
+
     public void saveDetails (View view){
-        // persist the details
-        writeToPrefs(itemName, null);
+        if (allowSaveButtonPress && !itemDetails.getText().toString().equals("")) {
+            // persist the details
+            writeToPrefs(itemName, null);
 
-        makeToast("Details saved!");
+            makeToast("Details saved!");
+            allowSaveButtonPress = false;
 
-        // soft keyboard down
-        InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        mgr.hideSoftInputFromWindow(itemDetails.getWindowToken(), 0);
+            // soft keyboard down
+            InputMethodManager mgr = (InputMethodManager) getSystemService
+                    (Context.INPUT_METHOD_SERVICE);
+            mgr.hideSoftInputFromWindow(itemDetails.getWindowToken(), 0);
+        }
 
     }
 
@@ -89,7 +121,8 @@ public class ListItemDetailsActivity extends AppCompatActivity {
             allowChangeButtonPress = false;
 
             // soft keyboard down
-            InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager mgr = (InputMethodManager) getSystemService
+                    (Context.INPUT_METHOD_SERVICE);
             mgr.hideSoftInputFromWindow(itemQty.getWindowToken(), 0);
 
             MainListActivity.allowChangeQty = true;
@@ -111,9 +144,11 @@ public class ListItemDetailsActivity extends AppCompatActivity {
         SharedPreferences pref = getSharedPreferences(itemName, MODE_PRIVATE);
         savedDetails = pref.getString(itemName, "");
         itemDetails.setText(savedDetails);
-
         savedQty = pref.getString(itemName + "q", "");
         itemQty.setText(savedQty);
+
+        allowSaveButtonPress = false;
+        allowChangeButtonPress = false;
     }
 
     // use itemName as a key to keep item details with right item, add "q" to key for quantity
@@ -136,7 +171,7 @@ public class ListItemDetailsActivity extends AppCompatActivity {
         toastLayout.setBackgroundColor(getResources().getColor(R.color.toast_color));
         TextView toastTV = (TextView) toastLayout.getChildAt(0);
         toastTV.setTextSize(30);
-        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 390);
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 460);
         toast.show();
     }
 }

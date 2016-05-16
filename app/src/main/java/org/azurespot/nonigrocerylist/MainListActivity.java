@@ -6,9 +6,9 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -72,14 +72,28 @@ public class MainListActivity extends AppCompatActivity {
                 // capture current item position (to use in onResume) if change its quantity
                 currentItemPosition = itemsAdapter.getPosition(itemModel);
 
-                Log.d("QUANTITY: ", itemModel.getQty());
-
                 Intent intent = new Intent(MainListActivity.this, ListItemDetailsActivity.class);
                 intent.putExtra("item name", itemModel.getTitle());
                 intent.putExtra("quantity", itemModel.getQty());
-                startActivity(intent);
+                ActivityOptionsCompat options = ActivityOptionsCompat.
+                        makeSceneTransitionAnimation(MainListActivity.this,
+                                getViewByPosition(position, itemsView), "item_name");
+                startActivity(intent, options.toBundle());
             }
         });
+    }
+
+    // gets the view of the list item clicked for transition code
+    public View getViewByPosition(int pos, ListView listView) {
+        final int firstListItemPosition = listView.getFirstVisiblePosition();
+        final int lastListItemPosition = firstListItemPosition + listView.getChildCount() - 1;
+
+        if (pos < firstListItemPosition || pos > lastListItemPosition ) {
+            return listView.getAdapter().getView(pos, null, listView);
+        } else {
+            final int childIndex = pos - firstListItemPosition;
+            return listView.getChildAt(childIndex);
+        }
     }
 
     // Adds item to list
