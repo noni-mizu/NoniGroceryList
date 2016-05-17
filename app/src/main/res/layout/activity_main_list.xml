@@ -72,15 +72,14 @@
         android:layout_alignBaseline="@+id/btnAddItem"/>
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:text="Add Item"
         android:textColor="@color/colorPrimary"
         android:id="@+id/btnAddItem"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_margin="5dp"
-        android:background="@layout/button_background"
+        android:background="@mipmap/ic_add"
         android:onClick="addItem" />
 
 </RelativeLayout>

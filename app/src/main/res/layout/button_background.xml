@@ -8,8 +8,8 @@
     <gradient
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:startColor="#00ffffff"
-        android:endColor="#00ffffff"
+        android:startColor="@color/colorPrimary"
+        android:endColor="@color/colorPrimary"
         android:angle="180" />
 
     <corners
@@ -20,6 +20,6 @@
     <stroke
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:width="2dp" android:color="@color/colorPrimaryDark" />
+        android:width="2dp" android:color="@color/colorPrimary" />
 
 </shape>
