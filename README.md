@@ -12,6 +12,7 @@ Material Design inclusions:
 - CardView widget
 - Baseline alignment for some widgets
 - Chared Element Activity Transition
+- Material Design color palette 
 - Other general guidelines
 
 ![noni s groceries 1](https://cloud.githubusercontent.com/assets/3211658/15343082/d1acb9e8-1c4e-11e6-87a2-7a9b9e433856.png)
